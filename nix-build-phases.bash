@@ -6,21 +6,21 @@
 # USAGE: 
 # mkdir dev; cd dev
 # nix develop nixpkgs#<PACKAGE>
-# . nix-build-phases.bash
+# source nix-build-phases.bash
 
 
 # make sure that script is sourced
 (return 0 2>/dev/null) && sourced=1 || sourced=0
 if [ "$sourced" -eq 0 ]; then
-  echo "ERROR, this script is meant to be sourced."
-  exit 1
+    echo -e "ERROR, this script must be sourced (run 'source $0')."
+    exit 1
 fi
 
 # make sure that script is sourced from nix shell
 (type -t genericBuild 2>/dev/null) && in_nix_shell=1 || in_nix_shell=0
 if [ "$in_nix_shell" -eq 0 ]; then
-  echo "ERROR, must be in nix shell."
-  return 1
+    echo -e "ERROR, this script must be sourced from nix shell environment (run 'nix develop nixpkgs#<PACKAGE>')."
+    return 1
 fi
 
 # phases detection taken from
