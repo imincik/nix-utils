@@ -17,7 +17,7 @@ if [ "$sourced" -eq 0 ]; then
 fi
 
 # make sure that script is sourced from nix shell
-(type -t genericBuild 2>/dev/null) && in_nix_shell=1 || in_nix_shell=0
+(type -t genericBuild &>/dev/null) && in_nix_shell=1 || in_nix_shell=0
 if [ "$in_nix_shell" -eq 0 ]; then
     echo -e "ERROR, this script must be sourced from nix shell environment (run 'nix develop nixpkgs#<PACKAGE>')."
     return 1
