@@ -4,7 +4,7 @@
 # This script must be sourced in Nix development shell environent !
 
 # USAGE: 
-# mkdir dev
+# mkdir dev; cd dev
 # nix develop nixpkgs#<PACKAGE>
 # . nix-build-phases.bash
 
