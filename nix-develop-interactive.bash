@@ -6,7 +6,7 @@
 # USAGE: 
 # mkdir dev; cd dev
 # nix develop nixpkgs#<PACKAGE>
-# source nix-build-phases.bash
+# source nix-develop-interactive.bash
 
 
 # make sure that script is sourced
