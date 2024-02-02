@@ -1,4 +1,4 @@
-name: Nixpkgs monitoring
+name: Check hydra build status (Darwin)
 
 on:
   schedule:
@@ -10,7 +10,16 @@ env:
 
 jobs:
   check-hydra-build:
-    name: Check Hydra build status
+
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - x86_64-darwin
+          - aarch64-darwin
+
+
+    name: Check build status
     runs-on: ubuntu-22.04
 
     steps:
@@ -24,7 +33,7 @@ jobs:
 
       - name: Check build status
         run: >
-          ./hydra-build-status.py \
+          ./hydra-build-status.py --platforms {{ matrix.platform }} \
             gdal \
             gdalMinimal \
             geos \
