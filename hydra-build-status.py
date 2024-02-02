@@ -1,25 +1,36 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i python3 -p python3Packages.requests python3Packages.beautifulsoup4 -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/7790e078f8979a9fcd543f9a47427eeaba38f268.tar.gz
 
-# Report last Hydra build status for given packages. Fail with exit code 1 if
-# status of any given package is not success.
+# Report last Hydra build status for given platforms and packages. All supported
+# platforms will be checked, if no platform is specified. Fail with exit code 1
+# if status of any checked package is not good.
 
 # USAGE:
-# hydra-build-status.py <PACKAGE> <PACKAGE> ...
+# hydra-build-status.py --platforms=[PLATFORM,PLATFORM,...] <PACKAGE> <PACKAGE> ...
 
 import sys
+from getopt import getopt
 
 import requests
 import time
 from bs4 import BeautifulSoup
 
 
+opts, args = getopt(sys.argv[1:], "p:", ["platforms="])
+
+# list of platforms
 platforms = ["x86_64-linux", "aarch64-linux", "x86_64-darwin", "aarch64-darwin"]
-pkgs = sys.argv[1:]
+for option, argument in opts:
+    if option in ["-p", "--platforms"]:
+        platforms = argument.split(",")
+
+# list of packages
+pkgs = args
+
 
 exit_code = 0
 for platform in platforms:
-    print(f">>> PLATFORM: {platform}")
+    print(f"\n### PLATFORM: {platform} ###")
     for pkg in pkgs:
         url = f"https://hydra.nixos.org/job/nixpkgs/trunk/{pkg}.{platform}/all"
         page = requests.get(url)
