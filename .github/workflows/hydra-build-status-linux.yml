@@ -1,4 +1,4 @@
-name: Check Hydra build status (Linux)
+name: Hydra build status (Linux)
 
 on:
   schedule:
