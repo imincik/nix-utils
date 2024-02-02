@@ -13,23 +13,29 @@ import requests
 from bs4 import BeautifulSoup
 
 
+platforms = [ "x86_64-linux", "aarch64-linux", "x86_64-darwin", "aarch64-darwin" ]
 pkgs = sys.argv[1:]
 
-
 exit_code = 0
-for pkg in pkgs:
-    URL = f"https://hydra.nixos.org/job/nixpkgs/trunk/{pkg}.x86_64-linux/all"
-    page = requests.get(URL)
+for platform in platforms:
+    for pkg in pkgs:
+        url = f"https://hydra.nixos.org/job/nixpkgs/trunk/{pkg}.{platform}/all"
+        page = requests.get(url)
 
-    soup = BeautifulSoup(page.content, "html.parser")
+        soup = BeautifulSoup(page.content, "html.parser")
 
-    results_table = soup.find("table", class_="table")
-    build_results = results_table.find_all("tr")
-    build_result = build_results[1].find_all("td")
-    build_status = build_result[0].img["alt"]
+        results_table = soup.find("table", class_="table")
+        build_results = results_table.find_all("tr")
 
-    print(f"{pkg : <50} {build_status : <20} URL: {URL : <50}")
+        if len(build_results) > 1:
+            build_result = build_results[1].find_all("td")
+            build_status = build_result[0].img["alt"]
+        else:
+            build_status = "No data"
 
-    if build_status != "Succeeded": exit_code = 1
+        print(f"{pkg : <50} {build_status : <20} URL: {url : <50}")
+
+        if build_status not in ["Succeeded", "Cancelled", "No data"]:
+            exit_code = 1
 
 sys.exit(exit_code)
