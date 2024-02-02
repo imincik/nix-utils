@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p python3Packages.requests python3Packages.beautifulsoup4 -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/7790e078f8979a9fcd543f9a47427eeaba38f268.tar.gz 
+#! nix-shell -i python3 -p python3Packages.requests python3Packages.beautifulsoup4 -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/7790e078f8979a9fcd543f9a47427eeaba38f268.tar.gz
 
 # Report last Hydra build status for given packages. Fail with exit code 1 if
 # status of any given package is not success.
@@ -10,14 +10,16 @@
 import sys
 
 import requests
+import time
 from bs4 import BeautifulSoup
 
 
-platforms = [ "x86_64-linux", "aarch64-linux", "x86_64-darwin", "aarch64-darwin" ]
+platforms = ["x86_64-linux", "aarch64-linux", "x86_64-darwin", "aarch64-darwin"]
 pkgs = sys.argv[1:]
 
 exit_code = 0
 for platform in platforms:
+    print(f">>> PLATFORM: {platform}")
     for pkg in pkgs:
         url = f"https://hydra.nixos.org/job/nixpkgs/trunk/{pkg}.{platform}/all"
         page = requests.get(url)
@@ -37,5 +39,7 @@ for platform in platforms:
 
         if build_status not in ["Succeeded", "Cancelled", "No data"]:
             exit_code = 1
+
+        time.sleep(1)  # don't overload Hydra
 
 sys.exit(exit_code)
