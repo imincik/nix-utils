@@ -33,7 +33,7 @@ jobs:
 
       - name: Check build status
         run: >
-          ./hydra-build-status.py --platforms {{ matrix.platform }} \
+          ./hydra-build-status.py --platforms ${{ matrix.platform }} \
             gdal \
             gdalMinimal \
             geos \
