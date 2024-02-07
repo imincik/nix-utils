@@ -2,7 +2,7 @@ name: Hydra build status (Linux)
 
 on:
   schedule:
-    - cron:  '* */12 * * *'
+    - cron:  '* 6 * * *'
   workflow_dispatch:
 
 env:
