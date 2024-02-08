@@ -9,6 +9,9 @@
 # source nix-develop-interactive.bash
 
 
+SHELL=$(which bash)
+export SHELL
+
 # make sure that script is sourced
 (return 0 2>/dev/null) && sourced=1 || sourced=0
 if [ "$sourced" -eq 0 ]; then
