@@ -1,6 +1,6 @@
 # nix-utils
 
-* **nix-build-phases.bash:** interactively run nix build phases
+* **nix-develop-interactive.bash:** interactively run nix build phases
 * **hydra-build-status.py:** report last Hydra build status for given packages
 
 ## Nixpkgs monitoring
