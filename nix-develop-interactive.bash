@@ -37,11 +37,9 @@ all_phases="${prePhases[*]:-} unpackPhase patchPhase ${preConfigurePhases[*]:-} 
 for phase in ${all_phases[*]}; do
     phases_pretty=$(echo "${all_phases[*]}" | sed "s|$phase|**$phase**|g" | tr -s '[:blank:]')
     echo -e "\n>>> Phase:   $phases_pretty"
-    # TODO: change command to runPhase $phase once 23.11 is released and 23.05 is not longer supported
-    # https://discourse.nixos.org/t/nix-build-phases-run-nix-build-phases-interactively/36090/4
     echo ">>> Command:  phases=$phase genericBuild"
     echo ">>> Press ENTER to run, CTRL-C to exit"
     read
 
-    phases=$phase genericBuild
+    phases=runPhase $phase 
 done
