@@ -31,42 +31,12 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v25
 
+      - name: Generate packages file
+        run: >
+          nix eval --json --file maintainer-packages.nix packages
+          | jq '[.. | objects | select(has("name")) | .name]'
+          > packages.json
+
       - name: Check build status
         run: >
-          ./hydra-build-status.py --platforms ${{ matrix.platform }} \
-            gdal \
-            gdalMinimal \
-            geos \
-            grass \
-            libgeotiff \
-            librttopo \
-            libspatialindex \
-            libspatialite \
-            pdal \
-            postgresql16Packages.postgis \
-            postgresql15Packages.postgis \
-            postgresql14Packages.postgis \
-            postgresql13Packages.postgis \
-            postgresql12Packages.postgis \
-            proj \
-            python310Packages.fiona \
-            python310Packages.gdal \
-            python310Packages.geopandas \
-            python310Packages.owslib \
-            python310Packages.psycopg \
-            python310Packages.pyproj \
-            python310Packages.pyqt5 \
-            python310Packages.rasterio \
-            python310Packages.shapely \
-            python311Packages.fiona \
-            python311Packages.gdal \
-            python311Packages.geopandas \
-            python311Packages.owslib \
-            python311Packages.psycopg \
-            python311Packages.pyproj \
-            python311Packages.pyqt5 \
-            python311Packages.rasterio \
-            python311Packages.shapely \
-            qgis \
-            qgis-ltr \
-            tiledb
+          ./hydra-build-status.py --platforms ${{ matrix.platform }} --file packages.json

@@ -1,7 +1,7 @@
-# USAGE:
-# nix eval --json -f maintainer-query.nix packages
-# nix eval --json -f maintainer-query.nix --arg pkgs 'import ./. {config.allowBroken = true; config.allowUnfree = true;}' packages
+# List packages maintained by a person.
 
+# USAGE:
+# nix eval --json -f maintainer-query.nix packages \
 # | jq '[.. | objects | select(has("name")) | .name]'
 
 
