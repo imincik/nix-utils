@@ -6,33 +6,41 @@
 # if status of any checked package is not good.
 
 # USAGE:
-# hydra-build-status.py --platforms=[PLATFORM,PLATFORM,...] <PACKAGE> <PACKAGE> ...
+# hydra-build-status.py --file <PACKAGES-FILE.json> --platforms=[PLATFORM,PLATFORM,...]
 
 import sys
 from getopt import getopt
 
+import json
 import requests
 import time
 from bs4 import BeautifulSoup
 
 
-opts, args = getopt(sys.argv[1:], "p:", ["platforms="])
+HYDRA_URL = "https://hydra.nixos.org"
+
+opts, args = getopt(sys.argv[1:], "f:p:", ["file=", "platforms="])
 
 # list of platforms
 platforms = ["x86_64-linux", "aarch64-linux", "x86_64-darwin", "aarch64-darwin"]
-for option, argument in opts:
-    if option in ["-p", "--platforms"]:
-        platforms = argument.split(",")
+for opt, arg in opts:
+    if opt in ["-p", "--platforms"]:
+        platforms = arg.split(",")
+
+    elif opt in ["-f", "--file"]:
+        pkgs_file = arg
 
 # list of packages
-pkgs = args
+with open(pkgs_file, 'r') as file:
+    pkgs = json.load(file)
 
 
 exit_code = 0
 for platform in platforms:
     print(f"\n### PLATFORM: {platform} ###")
+
     for pkg in pkgs:
-        url = f"https://hydra.nixos.org/job/nixpkgs/trunk/{pkg}.{platform}/all"
+        url = f"{HYDRA_URL}/job/nixpkgs/trunk/{pkg}.{platform}/all"
         page = requests.get(url)
 
         soup = BeautifulSoup(page.content, "html.parser")
@@ -46,7 +54,7 @@ for platform in platforms:
         else:
             build_status = "No data"
 
-        print(f"{pkg : <50} {build_status : <20} URL: {url : <50}")
+        print(f"{pkg: <50} {build_status: <20} URL: {url: <50}")
 
         if build_status not in ["Succeeded", "Cancelled", "No data"]:
             exit_code = 1
