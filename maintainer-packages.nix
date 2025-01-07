@@ -5,7 +5,10 @@
 # | jq '[.. | objects | select(has("name")) | .name]'
 
 
-{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/master.tar.gz") { config.allowBroken = true; config.allowUnfree = true; }
+{ pkgs ? import
+    (fetchTarball "https://github.com/NixOS/nixpkgs/archive/master.tar.gz")
+    { config.allowBroken = true; config.allowUnfree = true; }
+
 , maintainer ? "imincik"
 }:
 
@@ -37,7 +40,8 @@ let
     builtins.mapAttrs
       (name: pkg:
         if isDerivationRobust pkg then
-          if isMaintainedBy pkg then { name = "${if pkgSetName != null then pkgSetName + "." + name else name}"; } else null
+          if isMaintainedBy pkg then
+            { name = "${if pkgSetName != null then pkgSetName + "." + name else name}"; } else null
         else if isPkgSet pkg then
           recursePackageSet name pkg
         else null
