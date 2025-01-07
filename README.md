@@ -2,6 +2,7 @@
 
 * **nix-develop-interactive.bash:** interactively run nix build phases
 * **hydra-build-status.py:** report last Hydra build status for given packages
+* **maintainer-packages.nix:** list packages maintained by a person
 
 ## Nixpkgs monitoring
 
