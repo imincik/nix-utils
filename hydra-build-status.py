@@ -37,7 +37,10 @@ with open(pkgs_file, 'r') as file:
 
 exit_code = 0
 for platform in platforms:
-    print(f"\n### PLATFORM: {platform} ###")
+    print(f"\n### PLATFORM: {platform}\n")
+
+    print("| {f1: <50} | {f2: <20} | {f3: <80} |".format(f1="PACKAGE", f2="STATUS", f3="URL"))
+    print("| {sep: <50} | {sep: <20} | {sep: <80} |".format(sep=20*"-"))
 
     for pkg in pkgs:
         url = f"{HYDRA_URL}/job/nixpkgs/trunk/{pkg}.{platform}/all"
@@ -54,7 +57,7 @@ for platform in platforms:
         else:
             build_status = "No data"
 
-        print(f"{pkg: <50} {build_status: <20} URL: {url: <50}")
+        print(f"| {pkg: <50} | {build_status: <20} | {url: <80} |")
 
         if build_status not in ["Succeeded", "Cancelled", "No data"]:
             exit_code = 1

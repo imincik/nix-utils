@@ -1,4 +1,4 @@
-name: Hydra build status (Darwin)
+name: Build status (Darwin)
 
 on:
   schedule:
@@ -39,4 +39,4 @@ jobs:
 
       - name: Check build status
         run: >
-          ./hydra-build-status.py --platforms ${{ matrix.platform }} --file packages.json
+          ./hydra-build-status.py --platforms ${{ matrix.platform }} --file packages.json > $GITHUB_STEP_SUMMARY
