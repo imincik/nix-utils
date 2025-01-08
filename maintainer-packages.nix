@@ -61,6 +61,5 @@ in
 {
   packages =
     builtins.attrValues
-      (pkgs.lib.filterAttrsRecursive (n: v: v != { })
-        (pkgs.lib.filterAttrsRecursive (n: v: v != null) (recursePackageSet null pkgs)));
+      (pkgs.lib.filterAttrsRecursive (n: v: v != null || v != { }) (recursePackageSet null pkgs));
 }
