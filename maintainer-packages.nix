@@ -10,6 +10,8 @@
     { config.allowBroken = true; config.allowUnfree = true; }
 
 , maintainer ? "imincik"
+
+, showBroken ? true  # show broken packages
 }:
 
 let
@@ -27,6 +29,13 @@ let
     if result.success then result.value
     else false;
 
+  brokenFilter = pkg:
+    let
+      isBroken = pkg.meta.broken;
+    in
+      if showBroken then true
+      else if isBroken == false then true else false;
+
   isPkgSet = pkg:
     let
       result = builtins.tryEval (
@@ -40,7 +49,7 @@ let
     builtins.mapAttrs
       (name: pkg:
         if isDerivationRobust pkg then
-          if isMaintainedBy pkg then
+          if isMaintainedBy pkg && brokenFilter pkg then
             { name = "${if pkgSetName != null then pkgSetName + "." + name else name}"; } else null
         else if isPkgSet pkg then
           recursePackageSet name pkg
