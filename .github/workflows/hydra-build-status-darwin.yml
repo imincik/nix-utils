@@ -1,4 +1,4 @@
-name: Hydra build status (Darwin)
+name: Build status (Darwin)
 
 on:
   schedule:
