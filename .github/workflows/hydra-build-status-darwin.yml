@@ -33,7 +33,7 @@ jobs:
 
       - name: Generate packages file
         run: >
-          nix eval --json --file maintainer-packages.nix packages
+          nix eval --json --file maintainer-packages.nix --arg showBroken false packages
           | jq '[.. | objects | select(has("name")) | .name]'
           > packages.json
 
