@@ -1,5 +1,9 @@
-#! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p python3Packages.requests python3Packages.beautifulsoup4 -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/7790e078f8979a9fcd543f9a47427eeaba38f268.tar.gz
+#! /usr/bin/env nix
+#! nix shell --impure --expr ``
+#! nix with (import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/bffc22e.tar.gz") {});
+#! nix python3.withPackages (ps: with ps; [ requests beautifulsoup4 ])
+#! nix ``
+#! nix --command python3
 
 # Report last Hydra build status for given platforms and packages. All supported
 # platforms will be checked, if no platform is specified. Fail with exit code 1
