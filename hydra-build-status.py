@@ -22,6 +22,7 @@ from bs4 import BeautifulSoup
 
 
 HYDRA_URL = "https://hydra.nixos.org"
+OK_STATUSES = ["Succeeded", "Cancelled", "No data"]
 
 opts, args = getopt(sys.argv[1:], "f:p:", ["file=", "platforms="])
 
@@ -63,7 +64,7 @@ for platform in platforms:
 
         print(f"| {pkg: <50} | {build_status: <20} | {url: <80} |")
 
-        if build_status not in ["Succeeded", "Cancelled", "No data"]:
+        if build_status not in OK_STATUSES:
             exit_code = 1
 
         time.sleep(1)  # don't overload Hydra
