@@ -4,9 +4,17 @@
 * **hydra-build-status.py:** report last Hydra build status for given packages
 * **maintainer-packages.nix:** list packages maintained by a person
 
-## Hydra build status
+## Build status
 
 ### Geospatial packages
 
 [![Linux packages ](https://github.com/imincik/nix-utils/actions/workflows/hydra-build-status-linux.yml/badge.svg)](https://github.com/imincik/nix-utils/actions/workflows/hydra-build-status-linux.yml)
 [![Darwin packages](https://github.com/imincik/nix-utils/actions/workflows/hydra-build-status-darwin.yml/badge.svg)](https://github.com/imincik/nix-utils/actions/workflows/hydra-build-status-darwin.yml)
+
+
+## Reports
+
+### Geospatial packages
+
+* [Outdated packages](https://repology.org/projects/?maintainer=ivan.mincik%40gmail.com&inrepo=nix_unstable&outdated=1)
+* [Vulnerable packages](https://repology.org/projects/?maintainer=ivan.mincik%40gmail.com&inrepo=nix_unstable&vulnerable=on)
