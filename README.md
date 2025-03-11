@@ -22,3 +22,12 @@
 * [Outdated packages](https://repology.org/projects/?maintainer=ivan.mincik%40gmail.com&inrepo=nix_unstable&outdated=1)
 * [Vulnerable packages](https://repology.org/projects/?maintainer=ivan.mincik%40gmail.com&inrepo=nix_unstable&vulnerable=on)
 
+
+## Notes
+
+* Convert new line separated list of packages to JSON file suitable for
+  `hydra-build-status.py`
+  ```
+  cat packages.txt | jq -s --raw-input '. | split("\n")' > packages.json
+  hydra-build-status.py -f ./packages.json -p x86_64-linux
+  ```
