@@ -1,8 +1,7 @@
 # List packages maintained by a person.
 
 # USAGE:
-# nix eval --json -f maintainer-query.nix packages \
-# | jq '[.. | objects | select(has("name")) | .name]'
+# nix eval --json -f maintainer-packages.nix packages | jq '[.. | objects | select(has("name")) | .name]'
 
 
 { pkgs ? import
@@ -15,15 +14,28 @@
 }:
 
 let
+  inherit (pkgs.lib.debug) traceVal;
+  inherit (pkgs.lib)
+    attrValues
+    elem
+    filterAttrsRecursive
+    flatten
+    isAttrs
+    isDerivation
+    map
+    mapAttrs
+    ;
+
   myMaintainer = pkgs.lib.maintainers.${maintainer};
 
   isMaintainedBy = pkg:
-    builtins.elem myMaintainer (pkg.meta.maintainers or [ ]);
+    elem myMaintainer (pkg.meta.maintainers or [ ]
+      ++ (flatten (map (x: x.members) (pkg.meta.teams or [ ]))));
 
   isDerivationRobust = pkg:
     let
       result = builtins.tryEval (
-        pkgs.lib.isDerivation pkg
+        isDerivation pkg
       );
     in
     if result.success then result.value
@@ -33,20 +45,20 @@ let
     let
       isBroken = pkg.meta.broken;
     in
-      if showBroken then true
-      else if isBroken == false then true else false;
+    if showBroken then true
+    else if isBroken == false then true else false;
 
   isPkgSet = pkg:
     let
       result = builtins.tryEval (
-        (builtins.isAttrs pkg) && (pkg.recurseForDerivations or false)
+        (isAttrs pkg) && (pkg.recurseForDerivations or false)
       );
     in
     if result.success then result.value
     else false;
 
   recursePackageSet = pkgSetName: pkgs:
-    builtins.mapAttrs
+    mapAttrs
       (name: pkg:
         if isDerivationRobust pkg then
           if isMaintainedBy pkg && brokenFilter pkg then
@@ -60,6 +72,6 @@ let
 in
 {
   packages =
-    builtins.attrValues
-      (pkgs.lib.filterAttrsRecursive (n: v: v != null || v != { }) (recursePackageSet null pkgs));
+    attrValues
+      (filterAttrsRecursive (n: v: v != null || v != { }) (recursePackageSet null pkgs));
 }
