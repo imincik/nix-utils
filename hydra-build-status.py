@@ -48,8 +48,9 @@ for platform in platforms:
     print("| {sep: <50} | {sep: <20} | {sep: <80} |".format(sep=20*"-"))
 
     for pkg in pkgs:
+        headers = {'User-Agent': 'hydra-build-status.py; Nix Geospatial team; Ivan Mincik (@imincik)'}
         url = f"{HYDRA_URL}/job/nixpkgs/trunk/{pkg}.{platform}/all"
-        page = requests.get(url)
+        page = requests.get(url, headers=headers)
 
         soup = BeautifulSoup(page.content, "html.parser")
 
