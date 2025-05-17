@@ -18,11 +18,12 @@ from getopt import getopt
 import json
 import requests
 import time
+import datetime
 from bs4 import BeautifulSoup
 
-
+USER_AGENT="hydra-build-status.py; Nix Geospatial team; Ivan Mincik (@imincik)"
 HYDRA_URL = "https://hydra.nixos.org"
-OK_STATUSES = ["Succeeded", "Cancelled", "No data"]
+OK_STATUSES = ["Succeeded", "Cancelled", "No data", "No recent data"]
 
 opts, args = getopt(sys.argv[1:], "f:p:", ["file=", "platforms="])
 
@@ -48,7 +49,7 @@ for platform in platforms:
     print("| {sep: <50} | {sep: <20} | {sep: <80} |".format(sep=20*"-"))
 
     for pkg in pkgs:
-        headers = {'User-Agent': 'hydra-build-status.py; Nix Geospatial team; Ivan Mincik (@imincik)'}
+        headers = {'User-Agent': USER_AGENT}
         url = f"{HYDRA_URL}/job/nixpkgs/trunk/{pkg}.{platform}/all"
         page = requests.get(url, headers=headers)
 
@@ -59,7 +60,16 @@ for platform in platforms:
 
         if len(build_results) > 1:
             build_result = build_results[1].find_all("td")
-            build_status = build_result[0].img["alt"]
+
+            now_time = datetime.datetime.now()
+            build_time = datetime.datetime.fromtimestamp(int(build_result[2].time["data-timestamp"]))
+
+            # Ignore too old builds.
+            # For example: https://hydra.nixos.org/job/nixpkgs/trunk/qgis.x86_64-darwin/all
+            if (now_time - build_time).days < 365:
+                build_status = build_result[0].img["alt"]
+            else:
+                build_status = "No recent data"
         else:
             build_status = "No data"
 
