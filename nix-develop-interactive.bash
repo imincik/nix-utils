@@ -37,9 +37,9 @@ all_phases="${prePhases[*]:-} unpackPhase patchPhase ${preConfigurePhases[*]:-} 
 for phase in ${all_phases[*]}; do
     phases_pretty=$(echo "${all_phases[*]}" | sed "s|$phase|**$phase**|g" | tr -s '[:blank:]')
     echo -e "\n>>> Phase:   $phases_pretty"
-    echo ">>> Command:  phases=$phase genericBuild"
+    echo ">>> Command:  runPhase $phase"
     echo ">>> Press ENTER to run, CTRL-C to exit"
     read
 
-    phases=runPhase $phase 
+    runPhase $phase
 done
