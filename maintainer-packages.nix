@@ -31,7 +31,7 @@ let
   isMaintainedBy = pkg:
     elem
       myMaintainer
-      (pkg.meta.maintainers or [ ] ++ (flatten (map (x: x.members) (pkg.meta.teams or [ ]))));
+      (pkg.meta.maintainers or [ ] ++ (flatten (map (x: x.members or [ ]) (pkg.meta.teams or [ ]))));
 
   isDerivationRobust = pkg:
     let
