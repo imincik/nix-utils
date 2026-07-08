@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - x86_64-darwin
+          # - x86_64-darwin  # will be dropped in 26.11
           - aarch64-darwin
 
 
