@@ -1,16 +1,11 @@
-#! /usr/bin/env nix
-#! nix shell --impure --expr ``
-#! nix with (import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/bffc22e.tar.gz") {});
-#! nix python3.withPackages (ps: with ps; [ requests beautifulsoup4 ])
-#! nix ``
-#! nix --command python3
+#!/usr/bin/env python
 
 # Report last Hydra build status for given platforms and packages. All supported
 # platforms will be checked, if no platform is specified. Fail with exit code 1
 # if status of any checked package is not good.
 
 # USAGE:
-# hydra-build-status.py --file <PACKAGES-FILE.json> --platforms=[PLATFORM,PLATFORM,...]
+# hydra-build-status.py --file <PACKAGES-FILE.json> --platforms=[PLATFORM,PLATFORM,...] [--failed-only]
 
 import sys
 from getopt import getopt
@@ -25,10 +20,11 @@ USER_AGENT="hydra-build-status.py; Nix Geospatial team; Ivan Mincik (@imincik)"
 HYDRA_URL = "https://hydra.nixos.org"
 OK_STATUSES = ["Succeeded", "Cancelled", "No data", "No recent data"]
 
-opts, args = getopt(sys.argv[1:], "f:p:", ["file=", "platforms="])
+opts, args = getopt(sys.argv[1:], "f:p:x", ["file=", "platforms=", "failed-only"])
 
 # list of platforms
 platforms = ["x86_64-linux", "aarch64-linux", "x86_64-darwin", "aarch64-darwin"]
+failed_only = False
 for opt, arg in opts:
     if opt in ["-p", "--platforms"]:
         platforms = arg.split(",")
@@ -36,17 +32,27 @@ for opt, arg in opts:
     elif opt in ["-f", "--file"]:
         pkgs_file = arg
 
+    elif opt in ["-x", "--failed-only"]:
+        failed_only = True
+
 # list of packages
 with open(pkgs_file, 'r') as file:
     pkgs = json.load(file)
 
 
-exit_code = 0
-for platform in platforms:
+def print_header(platform):
     print(f"\n### PLATFORM: {platform}\n")
-
     print("| {f1: <50} | {f2: <20} | {f3: <80} |".format(f1="PACKAGE", f2="STATUS", f3="URL"))
     print("| {sep: <50} | {sep: <20} | {sep: <80} |".format(sep=20*"-"))
+
+
+exit_code = 0
+for platform in platforms:
+    header_printed = False
+
+    if not failed_only:
+        print_header(platform)
+        header_printed = True
 
     for pkg in pkgs:
         headers = {'User-Agent': USER_AGENT}
@@ -73,10 +79,17 @@ for platform in platforms:
         else:
             build_status = "No data"
 
-        print(f"| {pkg: <50} | {build_status: <20} | {url: <80} |")
+        is_ok = build_status in OK_STATUSES
 
-        if build_status not in OK_STATUSES:
+        if not is_ok:
             exit_code = 1
+
+        if not failed_only or not is_ok:
+            if not header_printed:
+                print_header(platform)
+                header_printed = True
+
+            print(f"| {pkg: <50} | {build_status: <20} | {url: <80} |")
 
         time.sleep(1)  # don't overload Hydra
 
