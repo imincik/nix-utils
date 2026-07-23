@@ -8,28 +8,29 @@ List of tools I use for Nixpkgs maintenance.
 * **team-packages.nix:** list packages maintained by a team (improved version of `maintainer-packages.nix`)
 * **package-versions.py:** report packages versions and backport status
 
+## Geospatial packages
 
-## Build status
+### Build status
 
 [![Linux packages ](https://github.com/imincik/nix-utils/actions/workflows/hydra-build-status-linux.yml/badge.svg)](https://github.com/imincik/nix-utils/actions/workflows/hydra-build-status-linux.yml)
 [![Darwin packages](https://github.com/imincik/nix-utils/actions/workflows/hydra-build-status-darwin.yml/badge.svg)](https://github.com/imincik/nix-utils/actions/workflows/hydra-build-status-darwin.yml)
 
-## Package versions
+### Package versions
 [![Package versions](https://github.com/imincik/nix-utils/actions/workflows/package-versions.yml/badge.svg)](https://github.com/imincik/nix-utils/actions/workflows/package-versions.yml)
 
-## Automatic updates (nixpkgs-update bot)
+## All nixpkgs
+
+### Automatic updates (nixpkgs-update bot)
 
 * [Update queue](https://nixpkgs-update-logs.nix-community.org/~supervisor/queue.html)
 * [Update logs](https://nixpkgs-update-logs.nix-community.org/)
 
-
-## Reports
+### Reports
 
 * [Outdated packages](https://repology.org/projects/?maintainer=ivan.mincik%40gmail.com&inrepo=nix_unstable&outdated=1)
 * [Vulnerable packages](https://repology.org/projects/?maintainer=ivan.mincik%40gmail.com&inrepo=nix_unstable&vulnerable=on)
 
-
-## Notes
+### Notes
 
 * Convert new line separated list of packages to JSON file suitable for
   `hydra-build-status.py`
