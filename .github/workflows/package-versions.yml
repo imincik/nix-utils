@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         stable-release:
-          - 26.06
+          - release-26.05
 
     name: Check versions
     runs-on: ubuntu-22.04
