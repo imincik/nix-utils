@@ -31,7 +31,7 @@ jobs:
 
       - name: Generate packages file
         run: >
-          nix eval --json --file maintainer-packages.nix --arg showBroken false packages
+          nix eval --json --file team-packages.nix --arg showBroken false packages
           > packages.json
 
       - name: Check packages versions
