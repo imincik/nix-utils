@@ -12,6 +12,8 @@
 [![Linux packages ](https://github.com/imincik/nix-utils/actions/workflows/hydra-build-status-linux.yml/badge.svg)](https://github.com/imincik/nix-utils/actions/workflows/hydra-build-status-linux.yml)
 [![Darwin packages](https://github.com/imincik/nix-utils/actions/workflows/hydra-build-status-darwin.yml/badge.svg)](https://github.com/imincik/nix-utils/actions/workflows/hydra-build-status-darwin.yml)
 
+## Package versions
+[![Package versions](https://github.com/imincik/nix-utils/actions/workflows/package-versions.yml/badge.svg)](https://github.com/imincik/nix-utils/actions/workflows/package-versions.yml)
 
 ## Automatic updates (nixpkgs-update bot)
 
