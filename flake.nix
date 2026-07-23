@@ -53,7 +53,29 @@
             };
           };
 
-          default = self.packages.${system}.hydra-build-status;
+          package-versions = pkgs.python3Packages.buildPythonApplication {
+            pname = "package-versions";
+            version = "0-unstable";
+            format = "other";
+
+            src = ./.;
+
+            dontBuild = true;
+            dontUnpack = true;
+
+            installPhase = ''
+              runHook preInstall
+              install -D ${./package-versions.py} $out/bin/package-versions
+              runHook postInstall
+            '';
+
+            meta = {
+              description = "Report packages versions and backport status";
+              homepage = "https://github.com/imincik/nix-utils";
+              license = pkgs.lib.licenses.mit;
+              mainProgram = "package-versions";
+            };
+          };
         }
       );
     };

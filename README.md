@@ -4,6 +4,7 @@
 * **hydra-build-status.py:** report last Hydra build status for given packages
 * **maintainer-packages.nix:** list packages maintained by a person
 * **team-packages.nix:** list packages maintained by a team (improved version of `maintainer-packages.nix`)
+* **package-versions.py:** report packages versions and backport status
 
 
 ## Build status

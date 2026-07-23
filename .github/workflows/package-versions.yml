@@ -1,0 +1,40 @@
+name: Packages versions
+
+on:
+  schedule:
+    - cron:  '0 6 * * *'
+  workflow_dispatch:
+
+env:
+  NIX_CONFIG: "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}"
+
+jobs:
+  check-hydra-build:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        stable-release:
+          - 26.06
+
+    name: Check build status
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v25
+
+      - name: Generate packages file
+        run: >
+          nix eval --json --file maintainer-packages.nix --arg showBroken false packages
+          > packages.json
+
+      - name: Check packages versions
+        run: >
+          nix run .#package-versions -- --file ./packages.json --branches=nixpkgs/master,nixpkgs/${{ matrix.stable-release }}
+          > $GITHUB_STEP_SUMMARY
