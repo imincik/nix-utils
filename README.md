@@ -4,7 +4,7 @@ List of tools I use for Nixpkgs maintenance.
 
 * **nix-develop-interactive.bash:** interactively run nix build phases
 * **hydra-build-status.py:** report last Hydra build status for given packages
-* **maintainer-packages.nix:** list packages maintained by a person
+* **maintainer-packages.nix:** list packages maintained by a individual
 * **team-packages.nix:** list packages maintained by a team (improved version of `maintainer-packages.nix`)
 * **package-versions.py:** report packages versions and backport status
 
