@@ -1,4 +1,4 @@
-name: Packages versions
+name: Package versions
 
 on:
   schedule:
